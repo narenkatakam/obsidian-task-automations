@@ -3,12 +3,12 @@
 
 set -euo pipefail
 
-LABEL_PREFIX="com.obsidian-automations"
+LABEL_PREFIX="com.narenkatakam.obsidian"
 
 echo "=== Uninstalling Obsidian Task Automations ==="
 
 for agent in daily sort; do
-  PLIST="$HOME/Library/LaunchAgents/${LABEL_PREFIX}.${agent}.plist"
+  PLIST="$HOME/Library/LaunchAgents/${LABEL_PREFIX}-${agent}.plist"
   if [ -f "$PLIST" ]; then
     launchctl unload "$PLIST" 2>/dev/null || true
     rm -f "$PLIST"

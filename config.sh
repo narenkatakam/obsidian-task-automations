@@ -11,5 +11,8 @@
 #   Linux:         "$HOME/obsidian-vault/Daily Notes"
 VAULT_DIR="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/VAULT-1/DAILY TASKS"
 
+# Weekly summary folder (sibling to daily notes)
+WEEKLY_DIR="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/VAULT-1/Weekly Summaries"
+
 # Log file location
 LOG="$HOME/Library/Logs/obsidian-automation.log"
