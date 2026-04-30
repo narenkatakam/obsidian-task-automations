@@ -1,3 +1,6 @@
 *.log
 .DS_Store
 CLAUDE.md
+
+# Claude Code harness config — local-only, do not ship
+.claude/
