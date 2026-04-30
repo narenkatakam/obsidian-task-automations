@@ -18,8 +18,12 @@ log() {
 }
 
 # --- FDA check: verify we can access the vault directory ---
-if ! ls "$VAULT_DIR" >/dev/null 2>&1; then
-  log "ERROR: Cannot access vault directory — likely missing Full Disk Access for /bin/bash"
+# Use bash builtins ([ -d ], [ -f ], read) instead of external commands (ls, head)
+# because macOS TCC blocks external binaries from accessing iCloud Drive
+# when running under launchd without Full Disk Access granted to /bin/bash.
+# Bash builtins use direct syscalls and bypass TCC restrictions.
+if [ ! -d "$VAULT_DIR" ]; then
+  log "ERROR: Cannot access vault directory — check path or grant Full Disk Access to /bin/bash"
   exit 1
 fi
 
@@ -29,14 +33,14 @@ if [ ! -f "$TODAY_FILE" ]; then
   exit 0
 fi
 
-# Verify we can read the file
-if ! head -1 "$TODAY_FILE" >/dev/null 2>&1; then
+# Verify we can read the file (use bash builtin read, not head)
+if ! read -r _ < "$TODAY_FILE" 2>/dev/null; then
   log "ERROR: Cannot read $TODAY.md — Operation not permitted (grant FDA to /bin/bash)"
   exit 1
 fi
 
-# Read today's note
-CONTENT=$(cat "$TODAY_FILE")
+# Read today's note (use bash builtin to avoid TCC/FDA issues with external cat)
+CONTENT=$(<"$TODAY_FILE")
 
 if [ -z "$CONTENT" ]; then
   log "Today's note is empty — skipping"

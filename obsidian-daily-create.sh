@@ -22,8 +22,10 @@ log() {
 }
 
 # --- FDA check: verify we can access the vault directory ---
-if ! ls "$VAULT_DIR" >/dev/null 2>&1; then
-  log "ERROR: Cannot access vault directory — likely missing Full Disk Access for /bin/bash"
+# Use bash builtin [ -d ] instead of external ls — macOS TCC blocks external binaries
+# from accessing iCloud Drive under launchd without FDA granted to /bin/bash.
+if [ ! -d "$VAULT_DIR" ]; then
+  log "ERROR: Cannot access vault directory — check path or grant Full Disk Access to /bin/bash"
   log "FIX: System Settings > Privacy & Security > Full Disk Access > add /bin/bash"
   echo "ERROR: Cannot access $VAULT_DIR" >&2
   echo "Grant Full Disk Access to /bin/bash in System Settings > Privacy & Security" >&2
